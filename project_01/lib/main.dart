@@ -19,11 +19,15 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           title: Text("Tarefas"),
         ),
-        body: Column(
+        body: ListView(
           children: [
             Task("Aprender Flutter"),
             Task("Criar meu primeiro app"),
             Task("Subir para o github"),
+            Task("Adicionar ao portfolio"),
+            Task("Adicionar ao portfolio"),
+            Task("Adicionar ao portfolio"),
+            Task("Adicionar ao portfolio lorem ipsum de ary in mare"),
             Task("Adicionar ao portfolio"),
           ],
         ),
@@ -35,34 +39,84 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class Task extends StatelessWidget {
+class Task extends StatefulWidget {
   final String name;
   const Task(this.name, {Key? key}) : super(key: key);
 
   @override
+  State<Task> createState() => _TaskState();
+}
+
+class _TaskState extends State<Task> {
+  int lvl = 0;
+
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Stack(
-        children: [
-          Container(color: Colors.blue, height: 140),
-          Container(
-            color: Colors.white,
-            height: 100,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        child: Stack(
+          children: [
+            Container(color: Colors.blue, height: 140),
+            Column(
               children: [
                 Container(
-                  color: Colors.black26,
-                  width: 72,
+                  color: Colors.white,
                   height: 100,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        color: Colors.black26,
+                        width: 72,
+                        height: 100,
+                      ),
+                      Container(
+                          width: 200,
+                          child: Text(
+                            widget.name,
+                            style: const TextStyle(
+                                fontSize: 24, overflow: TextOverflow.fade),
+                          )),
+                      ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              lvl++;
+                            });
+
+                            print(lvl);
+                          },
+                          child: const Icon(Icons.arrow_drop_up))
+                    ],
+                  ),
                 ),
-                Text(name),
-                ElevatedButton(
-                    onPressed: () {}, child: Icon(Icons.arrow_drop_up))
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Container(
+                        width: 200,
+                        child: LinearProgressIndicator(
+                          color: Colors.white,
+                          value: lvl / 10,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(12),
+                      child: Text(
+                        "Level: $lvl",
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 16),
+                      ),
+                    ),
+                  ],
+                ),
               ],
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }
