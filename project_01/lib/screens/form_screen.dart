@@ -68,7 +68,7 @@ class _FormViewState extends State<FormView> {
                       textAlign: TextAlign.center,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
-                        hintText: "Nome",
+                        hintText: "Importance",
                         fillColor: Colors.white70,
                         filled: true,
                       ),
@@ -90,7 +90,7 @@ class _FormViewState extends State<FormView> {
                       textAlign: TextAlign.center,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
-                        hintText: "Nome",
+                        hintText: "Image URL",
                         fillColor: Colors.white70,
                         filled: true,
                       ),
@@ -119,11 +119,11 @@ class _FormViewState extends State<FormView> {
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text("Saving new task.")));
-                          // print(nameController.text);
-                          // print(int.parse(importanceController.text));
-                          // print(imageController.text);
+                            const SnackBar(
+                              content: Text("Saving new task."),
+                            ),
+                          );
+                          Navigator.pop(context);
                         }
                       },
                       child: const Text("Add")),
