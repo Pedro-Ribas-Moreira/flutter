@@ -40,6 +40,7 @@ class _InitialViewState extends State<InitialView> {
                   "Add project to portfolio",
                   "https://thebogotapost.com/wp-content/uploads/2017/06/636052464065850579-137719760_flyer-image-1.jpg",
                   5),
+              SizedBox(height: 80),
             ],
           ),
         ),
