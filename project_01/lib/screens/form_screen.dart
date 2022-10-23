@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+// import 'package:project_01/components/tasks.dart';
+import 'package:project_01/data/task_inherited.dart';
 
 class FormView extends StatefulWidget {
-  const FormView({Key? key}) : super(key: key);
+  const FormView({Key? key, required this.taskContext}) : super(key: key);
+
+  final BuildContext taskContext;
 
   @override
   State<FormView> createState() => _FormViewState();
@@ -12,6 +16,23 @@ class _FormViewState extends State<FormView> {
   TextEditingController importanceController = TextEditingController();
   TextEditingController imageController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+
+  bool valueValidator(String? value) {
+    if (value != null && value.isEmpty) {
+      return true;
+    }
+    return false;
+  }
+
+  bool difficultyValidator(String? value) {
+    if (value != null && value.isEmpty) {
+      if (int.parse(value) > 5 || int.parse(value) < 1) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -38,7 +59,7 @@ class _FormViewState extends State<FormView> {
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
                       validator: (String? value) {
-                        if (value != null && value.isEmpty) {
+                        if (valueValidator(value)) {
                           return "Insert a task";
                         }
                         return null;
@@ -57,11 +78,10 @@ class _FormViewState extends State<FormView> {
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
                       validator: (value) {
-                        if (value!.isEmpty ||
-                            int.parse(value) > 5 ||
-                            int.parse(value) < 1) {
+                        if (difficultyValidator(value)) {
                           return "insert a importance number between 1 and 5";
                         }
+                        return null;
                       },
                       keyboardType: TextInputType.number,
                       controller: importanceController,
@@ -81,9 +101,10 @@ class _FormViewState extends State<FormView> {
                         setState(() {});
                       },
                       validator: (value) {
-                        if (value!.isEmpty) {
+                        if (valueValidator(value)) {
                           return "Insert an URL";
                         }
+                        return null;
                       },
                       keyboardType: TextInputType.url,
                       controller: imageController,
@@ -118,6 +139,14 @@ class _FormViewState extends State<FormView> {
                   ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
+                          // print(nameController.text);
+                          // print(imageController.text);
+                          // print(int.parse(importanceController.text));
+                          TaskInherit.of(widget.taskContext).newTask(
+                              nameController.text,
+                              imageController.text,
+                              int.parse(importanceController.text));
+
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               content: Text("Saving new task."),

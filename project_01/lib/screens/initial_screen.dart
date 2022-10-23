@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:project_01/components/tasks.dart';
+// import 'package:project_01/components/tasks.dart';
+import 'package:project_01/data/task_inherited.dart';
 import 'form_screen.dart';
 
 class InitialView extends StatefulWidget {
@@ -10,43 +12,75 @@ class InitialView extends StatefulWidget {
 }
 
 class _InitialViewState extends State<InitialView> {
+  // double getTotalLvl() {
+  //   double total = 0;
+  //   int count = TaskInherit.of(context).taskList.length;
+  //
+  //   for (int i = 0; i < count; i++) {
+  //     total = total + TaskInherit.of(context).taskList[i].lvl;
+  //   }
+  //   return total;
+  // }
+  //
+  // double getMaxLvl() {
+  //   double maxLvl = 0;
+  //   int count = TaskInherit.of(context).taskList.length;
+  //   for (int i = 0; i < count; i++) {
+  //     maxLvl = maxLvl + TaskInherit.of(context).taskList[i].importance;
+  //   }
+  //   return maxLvl;
+  // }
+  // TaskInherit.of(context).taskList.length
+  // TaskInherit.of(context).taskList[0].lvl
+
   @override
   Widget build(BuildContext context) {
+    double maxBar = 0;
+    int sumLvl = 0;
+    int sumImp = 0;
+    for (Task i in TaskInherit.of(context).taskList) {
+      sumLvl += i.lvl;
+      sumImp += i.importance;
+    }
+    maxBar += (sumLvl / sumImp) / 10;
     return Scaffold(
       appBar: AppBar(
         leading: Container(),
-        title: const Text("Tasks"),
-      ),
-      body: Container(
-        color: const Color(0xffE5E5E5),
-        child: ListView(
-          children: const [
-            Task(
-                "Learn Flutter",
-                "https://pbs.twimg.com/media/Eu7m692XIAEvxxP?format=png&name=large",
-                5),
-            Task(
-                "Develop my first app",
-                "https://tswbike.com/wp-content/uploads/2020/09/108034687_626160478000800_2490880540739582681_n-e1600200953343.jpg",
-                2),
-            Task(
-                "Upload to github",
-                "https://manhattanmentalhealthcounseling.com/wp-content/uploads/2019/06/Top-5-Scientific-Findings-on-MeditationMindfulness-881x710.jpeg",
-                3),
-            Task(
-                "Add project to portfolio",
-                "https://thebogotapost.com/wp-content/uploads/2017/06/636052464065850579-137719760_flyer-image-1.jpg",
-                5),
-            SizedBox(height: 80),
+        title: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text("Tasks"),
+            SizedBox(
+              width: 200,
+              child: LinearProgressIndicator(
+                color: Colors.white,
+                value: maxBar,
+              ),
+            )
           ],
         ),
+        actions: [
+          IconButton(
+              iconSize: 42,
+              onPressed: () {
+                setState(() {});
+              },
+              icon: const Icon(Icons.refresh))
+        ],
+      ),
+      body: ListView(
+        padding: const EdgeInsets.only(top: 8, bottom: 70),
+        children: TaskInherit.of(context).taskList,
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const FormView(),
+              builder: (contextNew) => FormView(
+                taskContext: context,
+              ),
             ),
           );
         },

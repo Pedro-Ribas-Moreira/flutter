@@ -5,15 +5,20 @@ class Task extends StatefulWidget {
   final String name;
   final String img;
   final int importance;
-  const Task(this.name, this.img, this.importance, {Key? key})
-      : super(key: key);
+  Task(this.name, this.img, this.importance, {Key? key}) : super(key: key);
+  int lvl = 0;
 
   @override
   State<Task> createState() => _TaskState();
 }
 
 class _TaskState extends State<Task> {
-  int lvl = 0;
+  bool assetOrNetwork() {
+    if (widget.img.contains("http")) {
+      return false;
+    }
+    return true;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,10 +48,15 @@ class _TaskState extends State<Task> {
                       height: 100,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(4),
-                        child: Image.network(
-                          widget.img,
-                          fit: BoxFit.cover,
-                        ),
+                        child: assetOrNetwork()
+                            ? Image.asset(
+                                widget.img,
+                                fit: BoxFit.cover,
+                              )
+                            : Image.network(
+                                widget.img,
+                                fit: BoxFit.cover,
+                              ),
                       ),
                     ),
                     Column(
@@ -73,7 +83,7 @@ class _TaskState extends State<Task> {
                             onPressed: () {
                               setState(
                                 () {
-                                  lvl++;
+                                  widget.lvl++;
                                 },
                               );
                             },
@@ -103,7 +113,7 @@ class _TaskState extends State<Task> {
                       child: LinearProgressIndicator(
                         color: Colors.white,
                         value: (widget.importance > 0)
-                            ? (lvl / widget.importance) / 10
+                            ? (widget.lvl / widget.importance) / 10
                             : 1,
                       ),
                     ),
@@ -111,7 +121,7 @@ class _TaskState extends State<Task> {
                   Padding(
                     padding: const EdgeInsets.all(12),
                     child: Text(
-                      "Level: $lvl",
+                      "Level: ${widget.lvl}",
                       style: const TextStyle(color: Colors.white, fontSize: 16),
                     ),
                   ),
